@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="run tests in parallel" parallel="tests" verbose="1" configfailurepolicy="continue" thread-count="2">
+    <test name="ParallelTest1">
+        <parameter name="testName" value="Test11"/>
+        <parameter name="deviceQuery" value="@serialnumber='02157df21be36232'"/>
+        <groups>
+            <run>
+                <include name="smoke"/>
+            </run>
+        </groups>
+    </test>
+    <!--<test name="ParallelTest2">-->
+        <!--<parameter name="testName" value="Test22"/>-->
+        <!--<parameter name="deviceQuery" value="@serialnumber='03157df3d24be314'"/>-->
+        <!--<groups>-->
+            <!--<run>-->
+                <!--<include name="smoke"/>-->
+            <!--</run>-->
+        <!--</groups>-->
+    <!--</test>-->
+    <test name="ParallelTest2">
+        <parameter name="testName" value="Test22"/>
+        <parameter name="deviceQuery" value="@serialnumber='03157df3d24be314'"/>
+        <classes>
+            <class name="automation.TestClasses.LoginTest"/>
+        </classes>
+    </test>
+</suite> <!-- Suite -->
