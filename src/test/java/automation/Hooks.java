@@ -1,44 +1,47 @@
 package automation;
 
 import DriverUtils.DriverUtil;
+import com.experitest.client.Client;
 import org.testng.annotations.*;
+import java.lang.reflect.Method;
 
 
-public class Hooks extends DriverUtil {
-    //protected static Client client;
+public class Hooks {
+    public String osNameGlobal;
+    public Client clientHooks;
 
-    @BeforeClass
-    public static void startAppium() {
-        System.out.println("++++++++++++++++++++++++++++++++++ Before Class+++++++++++++++++++");
-        //DriverUtil.startDriver(tn, dq);
-//        DriverUtil du = new DriverUtil();
-//        du.startDriver(tn, dq);
-//          client = DriverUtil.getClient();
-    }
-   @Parameters({"testName", "deviceQuery"})
-
-    @BeforeMethod
-    public static void setUp(String tn, String dq) {
-        System.out.println("++++++++++++++++++++++++++++++++++ Before Method+++++++++++++++++++");
-        DriverUtil.startDriver(tn, dq);
-        client = DriverUtil.getClient();
-        client.setReporter("xml", "reports", "testName");
-        client.applicationClearData("au.com.foxsports.martian");
-        client.launch("au.com.foxsports.martian/.login.LoginActivity", true, true);
-
+    @Parameters({"testName", "deviceQuery"})
+    @BeforeTest(alwaysRun = true)
+    public void startBeforeTest(String testName, String deviceQuery) {
+        DriverUtil.startDriver(testName, deviceQuery);
     }
 
-    @AfterMethod
-    public static void tearDownMethod() {
-        DriverUtil.getClient().generateReport(false);
+   @Parameters({ "osName", "appPackageNameOrApplicationName", "appActivity"})
+   @BeforeMethod(alwaysRun = true)
+   public void setUp(String osName, String appPackage, @Optional("Optional") String appActivity, Method method) {
+       clientHooks = DriverUtil.getClient();
+       osNameGlobal = osName;
+       clientHooks.setReporter("xml", "reports", "Test-"+method.getName() );
+        if(osNameGlobal.toLowerCase().equals("android")) {
+            clientHooks.deviceAction("Portrait");
+            clientHooks.applicationClearData(appPackage);
+            clientHooks.launch(appPackage + "/" + appActivity, true, true);
+        }else{
+            clientHooks.deviceAction("Unlock");
+            clientHooks.deviceAction("Portrait");
+            clientHooks.applicationClearData(appPackage);
+            clientHooks.launch(appPackage, true, true);
+        }
     }
 
-    @AfterClass
-    public static void tearDown() {
-//         if (client.applicationClose("au.com.foxsports.martian")) {
-//            // If statement
-//        }
-        DriverUtil.getClient().releaseClient();
-//
+    @AfterMethod(alwaysRun = true)
+    public void tearDownMethod() {
+        clientHooks.generateReport(false);
     }
+
+    @AfterTest(alwaysRun = true)
+    public void tearDownClass() {
+        clientHooks.releaseClient();
+    }
+
 }

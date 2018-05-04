@@ -1,32 +1,27 @@
 package automation.PageClasses;
 
-import DriverUtils.DriverUtil;
-import automation.Hooks;
+import automation.PageObjectClasses.HomePageObjects;
 import com.experitest.client.Client;
-import org.junit.Assert;
+import org.testng.Assert;
 
-public class HomePage extends Hooks{
-    DriverUtil du = new DriverUtil();
-    Client client = du.getClient();
+public class HomePage {
 
-    public void ifCarouselPresent() {
-        boolean found = client.swipeWhileNotFound("Right", 100, 2000, "NATIVE", "xpath=//*[@id='item_hero_carousel_pager']//*[@class='android.support.constraint.ConstraintLayout'][3]", 1, 400, 5, true);
-        Assert.assertTrue(found == false);
-    }
-
-    public void swipeDownToVideoCat() {
-        if(client.swipeWhileNotFound("Down", 50, 2000, "NATIVE", "xpath=(//*[@id='home_page_recycler_view']/*/*[@id='item_standard_tile_carousel_text'])[4]", 0, 1000, 5, true)){
-            // If statement
-            //client.deviceAction("Landscape");
+    public void ifCarouselPresent(Client client, String osNameGlobal) {
+        boolean found = client.swipeWhileNotFound("Right", 100, 2000, "NATIVE", HomePageObjects.getCarouselId(osNameGlobal), 1, 400, 5, true);
+        if(osNameGlobal.equals("android")){
+            Assert.assertTrue(!found);
+        }else{
+            Assert.assertTrue(found);
         }
     }
 
-    public void clickOnAVideo() {
-        client.click("NATIVE", "xpath=(//*[@id='home_page_recycler_view']/*[./*[@id='item_standard_tile_carousel_text']])[4]/*/*[2]", 0, 1);
-        client.sleep(5000);
-        //client.deviceAction("Landscape");
-        //client.sleep(5000);
+    public void swipeDownToVideoCat(Client client, String osNameGlobal) {
+        if(client.swipeWhileNotFound("Down", 50, 2000, "NATIVE", HomePageObjects.getVideoCatId(osNameGlobal), 0, 1000, 5, true)){
+        }
     }
 
-
+    public void clickOnAVideo(Client client, String osNameGlobal) {
+        client.click("NATIVE", HomePageObjects.getVideoToPlayId(osNameGlobal), 0, 1);
+        client.sleep(5000);
+    }
 }

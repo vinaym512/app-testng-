@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>au.com.foxsports</groupId>
-    <artifactId>fs-app-test-automation</artifactId>
+    <artifactId>fs-test-automation-app-hawk</artifactId>
     <version>1.0-SNAPSHOT</version>
 
         <repositories>
@@ -32,6 +32,27 @@
                 <artifactId>testng</artifactId>
                 <version>6.11</version>
             </dependency>
+
+            <dependency>
+                <groupId>org.uncommons</groupId>
+                <artifactId>reportng</artifactId>
+                <version>1.1.4</version>
+                <scope>test</scope>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.testng</groupId>
+                        <artifactId>testng</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>com.google.inject</groupId>
+                <artifactId>guice</artifactId>
+                <version>4.0</version>
+                <scope>test</scope>
+            </dependency>
+
+
         </dependencies>
 
         <build>
@@ -49,7 +70,16 @@
                                 <name>testnames</name>
                                 <value>${devicesToTest}</value>
                             </property>
+                            <property>
+                                <name>usedefaultlisteners</name>
+                                <value>false</value>
+                            </property>
+                            <property>
+                                <name>listener</name>
+                                <value>org.uncommons.reportng.HTMLReporter, org.uncommons.reportng.JUnitXMLReporter</value>
+                            </property>
                         </properties>
+                        <workingDirectory>target/</workingDirectory>
                         <groups>${groupsToTest}</groups>
                     </configuration>
                 </plugin>

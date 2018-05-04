@@ -4,15 +4,14 @@ import automation.Hooks;
 import automation.PageClasses.LoginPage;
 import org.testng.annotations.Test;
 
-public class LoginTest extends Hooks {
+public class LoginTest extends Hooks{
     LoginPage lp = new LoginPage();
 
-    @Test (groups = { "smoke" })
+    @Test (groups = { "smoke"})
     public void testLogin() {
-        lp.enterCredentials();
-        client.sleep(5000);
-        lp.hitLoginBtn();
-        client.sleep(5000);
-        lp.verifyLogin();
+        lp.enterCredentials(clientHooks, osNameGlobal);
+        lp.hitLoginBtn(clientHooks, osNameGlobal);
+        lp.verifyLogin(clientHooks, osNameGlobal);
+
     }
 }
